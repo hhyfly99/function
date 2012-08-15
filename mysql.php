@@ -29,7 +29,7 @@ function select_db($conn, $db_name)
 //if queried return: query result; else return: error
 function query_all($conn, $table)
 {
-	$query = sprintf("select * from '%s'", mysql_escape_string($table));
+	$query = sprintf("select * from %s", mysql_escape_string($table));
 	$result = mysql_query($query, $conn);
 	if (!$result) 
 	{
