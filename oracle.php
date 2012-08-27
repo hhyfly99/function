@@ -1,13 +1,8 @@
 <?php
 
-require_once '../config/default.php';
-
-$username = $oracle_name;
-$password = $oracle_pwd;
-$db = "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=$oracle_host)(PORT=$oracle_port))(CONNECT_DATA=(SID=$oracle_db)))";
-
 function OracleConnect($username, $password, $db, $charset, $session_mode)
 {
+	global $statement;
 	$connection = oci_connect($username, $password, $db);	
 	//$connection = oci_connect("alien", "alien", "192.168.1.180:1521/orcl");
 	
@@ -20,6 +15,21 @@ function OracleConnect($username, $password, $db, $charset, $session_mode)
 	}
 }
 
+function OracleSelectAll($connection, $table)
+{
+	$query = sprintf("select * from `%s`;");
+	$statement = oci_parse($connection, $query);
+	oci_execute($statement, OCI_DEFAULT);
+}
+
+function OracleClose($connection, $statement)
+{
+	if ($statement != '')
+		oci_free_statement($statement);
+	oci_close($connection);
+}
+
+/*
 $connection = OracleConnect($username, $password, $db, "", "", "");
 
 $query = "select * from ALIEN_SCORE";
@@ -28,5 +38,5 @@ oci_execute($statement, OCI_DEFAULT);
 
 while ($row = oci_fetch_array($statement, OCI_ASSOC))
 	print_r($row);
-
+*/
 ?>
